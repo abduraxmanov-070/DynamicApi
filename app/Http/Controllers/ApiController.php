@@ -138,38 +138,38 @@ class {$table}Controller extends Controller
     }
     public function store(Request $request){
         $table = $request->name;
-//        $col = $request->col;
-//        $type = $request->type;
-//        if (!isset($col)){
-//            return redirect()->back()->with('error', "Please add at least one column");
-//        }
-//        $model = $this->make_model($table, $col);
-//        if ($model == 'Model already exists'){
-//            return redirect()->back()->with('error', "Model already exists");
-//        } else {
-//            $controller = $this->make_controller($table);
-//            $route = $this->make_route($table);
-//        }
-//        $message = $this->exist($table);
-//        if ($message == 'Table already exists'){
-//            return redirect()->back()->with('error', $message);
-//        }
-//        $sql = $this->create_table($table, $col, $type);
-//        $host = Config::get('database.connections.mysql.host');
-//        $database = Config::get('database.connections.mysql.database');
-//        $username = Config::get('database.connections.mysql.username');
-//        $password = Config::get('database.connections.mysql.password');
-//        $conn = mysqli_connect($host, $username, $password, $database);
-//        if (mysqli_query($conn, $sql)) {
-//            $message = "index ->".route($table.'.index')."\n";
-//            $message .= "store ->".route($table.'.store')."\n";
-//            $message .= "show ->".route($table.'.show', 1)."\n";
-//            $message .= "update ->".route($table.'.update', 1)."\n";
-//            $message .= "destroy ->".route($table.'.destroy', 1)."\n";
-//            return redirect()->back()->with('success', $message);
-//        } else {
-//            return redirect()->back()->with('error', 'Error creating table: ' . mysqli_error($conn));
-//        }
+        $col = $request->col;
+        $type = $request->type;
+        if (!isset($col)){
+            return redirect()->back()->with('error', "Please add at least one column");
+        }
+        $model = $this->make_model($table, $col);
+        if ($model == 'Model already exists'){
+            return redirect()->back()->with('error', "Model already exists");
+        } else {
+            $controller = $this->make_controller($table);
+            $route = $this->make_route($table);
+        }
+        $message = $this->exist($table);
+        if ($message == 'Table already exists'){
+            return redirect()->back()->with('error', $message);
+        }
+        $sql = $this->create_table($table, $col, $type);
+        $host = Config::get('database.connections.mysql.host');
+        $database = Config::get('database.connections.mysql.database');
+        $username = Config::get('database.connections.mysql.username');
+        $password = Config::get('database.connections.mysql.password');
+        $conn = mysqli_connect($host, $username, $password, $database);
+        if (mysqli_query($conn, $sql)) {
+            $message = "index ->".route($table.'.index')."\n";
+            $message .= "store ->".route($table.'.store')."\n";
+            $message .= "show ->".route($table.'.show', 1)."\n";
+            $message .= "update ->".route($table.'.update', 1)."\n";
+            $message .= "destroy ->".route($table.'.destroy', 1)."\n";
+            return redirect()->back()->with('success', $message);
+        } else {
+            return redirect()->back()->with('error', 'Error creating table: ' . mysqli_error($conn));
+        }
         $message = array();
         array_push($message, [
             'function' => 'index',
