@@ -98,7 +98,7 @@ class {$table}Controller extends Controller
     public function store(Request \$request)
     {
         {$table}::create(\$request->all());
-        return response()->json(['message' => 'Test created successfully']);
+        return response()->json(['message' => '{$table} created successfully']);
     }
     public function show(\$id)
     {
@@ -109,13 +109,13 @@ class {$table}Controller extends Controller
     {
         \$test = {$table}::find(\$id);
         \$test->update(\$request->all());
-        return response()->json(['message' => 'Test updated successfully']);
+        return response()->json(['message' => '{$table} updated successfully']);
     }
     public function destroy(\$id)
     {
         \$test = {$table}::find(\$id);
         \$test->delete();
-        return response()->json(['message' => 'Test deleted successfully']);
+        return response()->json(['message' => '{$table} deleted successfully']);
     }
 }
 ";
@@ -137,6 +137,7 @@ class {$table}Controller extends Controller
         }
     }
     public function store(Request $request){
+        $url = env("App_URL");
         $table = $request->name;
         $col = $request->col;
         $type = $request->type;
@@ -160,40 +161,31 @@ class {$table}Controller extends Controller
         $username = Config::get('database.connections.mysql.username');
         $password = Config::get('database.connections.mysql.password');
         $conn = mysqli_connect($host, $username, $password, $database);
-        if (mysqli_query($conn, $sql)) {
-            $message = "index ->".route($table.'.index')."\n";
-            $message .= "store ->".route($table.'.store')."\n";
-            $message .= "show ->".route($table.'.show', 1)."\n";
-            $message .= "update ->".route($table.'.update', 1)."\n";
-            $message .= "destroy ->".route($table.'.destroy', 1)."\n";
-            return redirect()->back()->with('success', $message);
-        } else {
-            return redirect()->back()->with('error', 'Error creating table: ' . mysqli_error($conn));
-        }
+        mysqli_query($conn, $sql);
         $message = array();
         array_push($message, [
             'function' => 'index',
-            'url' => route($table.'.index'),
+            'url' => $url."/api/{$table}",
             'method' => 'GET',
         ]);
         array_push($message, [
             'function' => 'store',
-            'url' => route($table.'.store'),
+            'url' => $url."/api/{$table}",
             'method' => 'POST',
         ]);
         array_push($message, [
             'function' => 'show',
-            'url' => route($table.'.show', 1),
+            'url' => $url."/api/{$table}/id",
             'method' => 'GET',
         ]);
         array_push($message, [
             'function' => 'update',
-            'url' => route($table.'.update', 1),
+            'url' => $url."/api/{$table}/id",
             'method' => 'PUT',
         ]);
         array_push($message, [
             'function' => 'destroy',
-            'url' => route($table.'.destroy', 1),
+            'url' => $url."/api/{$table}/id",
             'method' => 'DELETE',
         ]);
         return redirect()->back()->with('message', $message);
